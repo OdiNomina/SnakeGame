@@ -4,10 +4,10 @@ import java.awt.Point;
 import java.util.Scanner;
 
 public class ZZZZZnake {
-//	Auf dem Bildschirm gibt es den Spieler, eine Schlange, Gold und eine Tür. Die Tür und das Gold sind fest, den Spieler können
-//	wir bewegen, und die Schlange bewegt sich selbstständig auf den Spieler zu.
-//	Wir müssen versuchen, die Spielfigur zum Gold zu bewegen und dann zur Tür.
-//	Wenn die Schlange uns vorher erwischt, haben wir Pech gehabt, und das Spiel ist verloren.
+//	Auf dem Bildschirm gibt es den Spieler, eine Schlange, Gold und eine TÃ¼r.
+//	Die TÃ¼r und das Gold sind fest, der Spieler kann bewegt werden und die Schlange bewegt sich selbststÃ¤ndig auf den Spieler zu.
+//	Der Spieler muss zum Gold und dann zur TÃ¼r. Wenn die Schlange den Spieler vorher erwischt, ist das Spiel verloren.
+	
 	private static final int maxX = 40, maxY = 10;
 	
 	private static final Player player = new Player();
@@ -16,7 +16,7 @@ public class ZZZZZnake {
 	private static final Gold gold1 = new Gold();
 	private static final Gold gold2 = new Gold();
 	private static final Door door = new Door();
-	//	Ein statisches Array damit es nur einmal während des Programmlaufs initialisiert werden muss.
+	//	Ein statisches Array damit es nur einmal wÃ¤hrend des Programmlaufs initialisiert werden muss.
 	private static Point[] points = new Point[] {player, snake1, snake2, gold1, gold2, door};
 	
 	
@@ -70,6 +70,43 @@ public class ZZZZZnake {
 		p.setLocation(randomX, randomY);
 	}
 	
+	private static void printScreen(final Point... points){
+		if(points == null || points.length == 0)
+			throw new IllegalArgumentException("Array is null or empty");
+		
+		final Point currentPosition = new Point(0, 0);
+		
+		for(int y = 0; y < maxY; y++) {
+			for(int x = 0; x < maxX; x++) {
+				currentPosition.setLocation(x, y);
+				nextPosition:{
+					for(Point p : points) {
+						if(currentPosition.equals(p)) {
+							if(p instanceof Player) {
+								System.out.print( "P" );
+								break nextPosition;
+							}
+							else if(p instanceof Snake) {
+									System.out.print( "^" ); 
+									break nextPosition;
+								}
+								else if(p instanceof Gold) {
+										System.out.print( "$" );
+										break nextPosition;
+									}
+									else if(p instanceof Door) {
+											System.out.print( "#" );
+											break nextPosition;
+										}
+						}
+					}
+					System.out.print( "." );
+				}
+			}
+			System.out.println();
+		}
+	}
+	
 	@SuppressWarnings("unused")
 	private static void printScreen(final Point player, final Point snake1, final Point snake2, final Point gold1, final Point gold2, final Point door){
 		final Point currentPosition = new Point(0, 0);
@@ -82,18 +119,19 @@ public class ZZZZZnake {
 					System.out.print( "P" );
 				else if(currentPosition.equals(snake1) || currentPosition.equals(snake2))
 					System.out.print( "^" );
-				else if(currentPosition.equals(gold1) || currentPosition.equals(gold2))
-					System.out.print( "$" );
-				else if(currentPosition.equals(door))
-					System.out.print( "#" );
-				else
-					System.out.print( "." );
+					else if(currentPosition.equals(gold1) || currentPosition.equals(gold2))
+						System.out.print( "$" );
+						else if(currentPosition.equals(door))
+							System.out.print( "#" );
+							else
+								System.out.print( "." );
 			}
 			System.out.println();
 		}
 	}
 	
-	private static void printScreen(final Point... points){
+	@SuppressWarnings("unused")
+	private static void printScreenFlag(final Point... points){
 		if(points == null || points.length == 0)
 			throw new IllegalArgumentException("Array is null or empty");
 		
@@ -135,5 +173,7 @@ public class ZZZZZnake {
 			System.out.println();
 		}
 	}
+	
+	
 	
 }
