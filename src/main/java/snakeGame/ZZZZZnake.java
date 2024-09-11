@@ -1,6 +1,7 @@
 package snakeGame;
 
 import java.awt.Point;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ZZZZZnake {
@@ -16,7 +17,6 @@ public class ZZZZZnake {
 	private static final Gold gold1 = new Gold();
 	private static final Gold gold2 = new Gold();
 	private static final Door door = new Door();
-	//	Ein statisches Array damit es nur einmal während des Programmlaufs initialisiert werden muss.
 	private static Point[] points = new Point[] {player, snake1, snake2, gold1, gold2, door};
 	
 	
@@ -75,33 +75,33 @@ public class ZZZZZnake {
 			throw new IllegalArgumentException("Array is null or empty");
 		
 		final Point currentPosition = new Point(0, 0);
-		
 		for(int y = 0; y < maxY; y++) {
 			for(int x = 0; x < maxX; x++) {
 				currentPosition.setLocation(x, y);
-				nextPosition:{
+				if(Arrays.asList(points).contains(currentPosition)) {
 					for(Point p : points) {
 						if(currentPosition.equals(p)) {
+							if(p instanceof Snake) {
+								System.out.print( "^" ); 
+								break;
+							}
 							if(p instanceof Player) {
 								System.out.print( "P" );
-								break nextPosition;
+								break;
 							}
-							else if(p instanceof Snake) {
-									System.out.print( "^" ); 
-									break nextPosition;
-								}
-								else if(p instanceof Gold) {
-										System.out.print( "$" );
-										break nextPosition;
-									}
-									else if(p instanceof Door) {
-											System.out.print( "#" );
-											break nextPosition;
-										}
+							if(p instanceof Gold) {
+								System.out.print( "$" );
+								break;
+							}
+							if(p instanceof Door) {
+								System.out.print( "#" );
+								break;
+							}
 						}
 					}
-					System.out.print( "." );
 				}
+				else
+					System.out.print( "." );
 			}
 			System.out.println();
 		}
@@ -109,6 +109,9 @@ public class ZZZZZnake {
 	
 	@SuppressWarnings("unused")
 	private static void printScreen(final Point player, final Point snake1, final Point snake2, final Point gold1, final Point gold2, final Point door){
+		if(points == null || points.length == 0)
+			throw new IllegalArgumentException("Array is null or empty");
+		
 		final Point currentPosition = new Point(0, 0);
 		
 		for(int y = 0; y < maxY; y++) {
@@ -137,12 +140,10 @@ public class ZZZZZnake {
 		
 		final Point currentPosition = new Point(0, 0);
 		boolean isPrinted;
-		
 		for(int y = 0; y < maxY; y++) {
 			for(int x = 0; x < maxX; x++) {
 				currentPosition.setLocation(x, y);
 				isPrinted = false;
-				
 				for(Point p : points) {
 					if(currentPosition.equals(p)) {
 						if(p instanceof Player) {
@@ -150,21 +151,21 @@ public class ZZZZZnake {
 							isPrinted = true;
 							break;
 						}
-						else if(p instanceof Snake) {
-								System.out.print( "^" );
-								isPrinted = true;
-								break;
-							}
-							else if(p instanceof Gold) {
-									System.out.print( "$" );
-									isPrinted = true;
-									break;
-								}
-								else if(p instanceof Door) {
-										System.out.print( "#" );
-										isPrinted = true;
-										break;
-									}
+						if(p instanceof Snake) {
+							System.out.print( "^" );
+							isPrinted = true;
+							break;
+						}
+						if(p instanceof Gold) {
+							System.out.print( "$" );
+							isPrinted = true;
+							break;
+						}
+						if(p instanceof Door) {
+							System.out.print( "#" );
+							isPrinted = true;
+							break;
+						}
 					}
 				}
 				if(!isPrinted)
@@ -174,6 +175,42 @@ public class ZZZZZnake {
 		}
 	}
 	
+	@SuppressWarnings("unused")
+	private static void printScreenLabel(final Point... points){
+		if(points == null || points.length == 0)
+			throw new IllegalArgumentException("Array is null or empty");
+		
+		final Point currentPosition = new Point(0, 0);
+		for(int y = 0; y < maxY; y++) {
+			for(int x = 0; x < maxX; x++) {
+				currentPosition.setLocation(x, y);
+				nextPosition:{
+					for(Point p : points) {
+						if(currentPosition.equals(p)) {
+							if(p instanceof Player) {
+								System.out.print( "P" );
+								break nextPosition;
+							}
+							if(p instanceof Snake) {
+								System.out.print( "^" ); 
+								break nextPosition;
+							}
+							if(p instanceof Gold) {
+								System.out.print( "$" );
+								break nextPosition;
+							}
+							if(p instanceof Door) {
+								System.out.print( "#" );
+								break nextPosition;
+							}
+						}
+					}
+					System.out.print( "." );
+				}
+			}
+			System.out.println();
+		}
+	}
 	
 	
 }
