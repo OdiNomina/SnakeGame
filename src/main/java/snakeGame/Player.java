@@ -6,21 +6,21 @@ import java.util.Scanner;
 public class Player extends Point  {
 	
 	private static final long serialVersionUID = 1L;
+	
 	private static String validKeys = "\nDer Spieler kann mit folgenden Tasten bewegt werden:\n"
 			+ "Hoch: w, W, h, H\n"
 			+ "Tief: s, S, t, T\n"
 			+ "Links: a, A, l, L\n"
 			+ "Rechts: d, D, r, R";
-	
 	protected int moves = 0;
+	protected boolean validInput = true;
 	
 	
-	protected boolean movePlayer(final Scanner sc, final int maxX, final int maxY) {
+	protected void movePlayer(final Scanner sc, final int maxX, final int maxY) {
 		if(sc == null)
 			throw new IllegalArgumentException("Scanner is null");
 		
-		moved:
-		{
+		moved:{
 			for(int i = 0; i < 10; i++) {
 				switch(sc.next().charAt(0)) {
 					case 'w', 'W', 'h', 'H' -> {
@@ -44,18 +44,17 @@ public class Player extends Point  {
 					}
 				}
 			}
-			System.out.println("Zuviele ungültige Eingaben -> Spiel wird beendet!");
-			return false;
+			System.out.println("\nZuviele ungÃ¼ltige Eingaben -> Spiel wird beendet!");
+			validInput = false;
 		}
-		return true;
 	}
 	
-	protected boolean movePlayerOverBorders(final Scanner sc, final int maxX, final int maxY) {
+	
+	protected void movePlayerOverBorders(final Scanner sc, final int maxX, final int maxY) {
 		if(sc == null)
 			throw new IllegalArgumentException("Scanner is null");
 		
-		moved:
-		{
+		moved:{
 			for(int i = 0; i < 10; i++) {
 				switch(sc.next().charAt(0)) {
 					case 'w', 'W', 'h', 'H' -> {
@@ -79,9 +78,8 @@ public class Player extends Point  {
 					}
 				}
 			}
-			System.out.println("Zuviele ungültige Eingaben -> Spiel wird beendet!");
-			return false;
+			System.out.println("\nZuviele ungÃ¼ltige Eingaben -> Spiel wird beendet!");
+			validInput = false;
 		}
-		return true;
 	}
 }

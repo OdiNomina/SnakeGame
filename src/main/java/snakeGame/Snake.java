@@ -6,6 +6,10 @@ public class Snake  extends Point {
 	
 	private static final long serialVersionUID = 1L;
 	
+	public Snake() {
+		this.x = -1;
+		this.y = -1;
+	}
 	
 	protected void moveSnake(final Point player) {
 		if(player == null)
