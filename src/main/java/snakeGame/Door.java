@@ -1,8 +1,6 @@
 package snakeGame;
 
-import java.awt.Point;
-
-public class Door extends Point {
+public class Door extends GamePoint {
 
 	private static final long serialVersionUID = 1L;
 

@@ -1,28 +1,27 @@
 package snakeGame;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
-public class Snake  extends Point {
+public class Snake {
 	
-	private static final long serialVersionUID = 1L;
+	protected static final int SnakeStartLength = 5;
 	
-	public Snake() {
-		this.x = -1;
-		this.y = -1;
-	}
+	protected ArrayList<SnakeSection> snakeSections = new ArrayList<SnakeSection>();
 	
-	protected void moveSnake(final Point player) {
-		if(player == null)
-			throw new IllegalArgumentException("Player is null");
+	
+	protected void moveSnake(final Point snakeSection, final Point player) {
+		if(snakeSection == null || player == null)
+			throw new IllegalArgumentException("Can not move snake, argument is null");
 		
-		if(player.x < x)
-			x--;
-		else if(player.x > x )
-			x++;
+		if(player.x < snakeSection.x)
+			snakeSection.x--;
+		else if(player.x > snakeSection.x )
+			snakeSection.x++;
 			
-		if(player.y < y)
-			y--;
-		else if(player.y > y)
-			y++;
+		if(player.y < snakeSection.y)
+			snakeSection.y--;
+		else if(player.y > snakeSection.y)
+			snakeSection.y++;
 	}
 }

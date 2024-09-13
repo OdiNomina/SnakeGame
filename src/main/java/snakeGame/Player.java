@@ -1,9 +1,8 @@
 package snakeGame;
 
-import java.awt.Point;
 import java.util.Scanner;
 
-public class Player extends Point  {
+public class Player extends GamePoint {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -16,7 +15,7 @@ public class Player extends Point  {
 	protected boolean validInput = true;
 	
 	
-	protected void movePlayer(final Scanner sc, final int maxX, final int maxY) {
+	protected void movePlayer(final Scanner sc) {
 		if(sc == null)
 			throw new IllegalArgumentException("Scanner is null");
 		
@@ -25,18 +24,22 @@ public class Player extends Point  {
 				switch(sc.next().charAt(0)) {
 					case 'w', 'W', 'h', 'H' -> {
 						y = Math.max(0, y - 1);
+						moves++;
 						break moved;
 					}
 					case 's', 'S', 't', 'T' -> {
-						y = Math.min((maxY - 1), y + 1);
+						y = Math.min((GamePoint.YMAX - 1), y + 1);
+						moves++;
 						break moved;
 					}
 					case 'a', 'A', 'l', 'L' -> {
-						x = Math.max(0, x - 1); 
+						x = Math.max(0, x - 1);
+						moves++;
 						break moved;
 					}
 					case 'd', 'D', 'r', 'R' -> {
-						x = Math.min((maxX - 1), x + 1); 
+						x = Math.min((GamePoint.XMAX - 1), x + 1);
+						moves++;
 						break moved;
 					}
 					default -> {
@@ -50,7 +53,7 @@ public class Player extends Point  {
 	}
 	
 	
-	protected void movePlayerOverBorders(final Scanner sc, final int maxX, final int maxY) {
+	protected void movePlayerOverBorders(final Scanner sc) {
 		if(sc == null)
 			throw new IllegalArgumentException("Scanner is null");
 		
@@ -58,19 +61,23 @@ public class Player extends Point  {
 			for(int i = 0; i < 10; i++) {
 				switch(sc.next().charAt(0)) {
 					case 'w', 'W', 'h', 'H' -> {
-						y = (y - 1) < 0 ? (maxY - 1) : ( y - 1 );
+						y = (y - 1) < 0 ? (GamePoint.YMAX - 1) : ( y - 1 );
+						moves++;
 						break moved;
 					}
 					case 's', 'S', 't', 'T' -> {
-						y = (y + 1) > (maxY - 1) ? 0 : (y + 1);
+						y = (y + 1) > (GamePoint.YMAX - 1) ? 0 : (y + 1);
+						moves++;
 						break moved;
 					}
 					case 'a', 'A', 'l', 'L' -> {
-						x = (x - 1) < 0 ? (maxX - 1) : (x - 1) ;
+						x = (x - 1) < 0 ? (GamePoint.XMAX - 1) : (x - 1);
+						moves++;
 						break moved;
 					}
 					case 'd', 'D', 'r', 'R' -> {
-						x = (x + 1) > (maxX - 1) ? 0 : (x + 1);
+						x = (x + 1) > (GamePoint.XMAX - 1) ? 0 : (x + 1);
+						moves++;
 						break moved;
 					}
 					default -> {
