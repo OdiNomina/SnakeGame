@@ -64,16 +64,14 @@ public class ZZZnake {
 				return;
 			}
 			
-			if(player.moves > 5) { // head start for player
+			// The snake grows after every second move of the player
+			if(snake1.snakeSections.size() < Snake.SnakeStartLength || player.moves % 2 == 0) {
 				snake1.snakeSections.add(new SnakeSection(snake1.snakeSections.getLast()));
-				if(snake1.snakeSections.size() > Snake.SnakeStartLength)
-					snake1.snakeSections.removeFirst();
-				
-				snake2.snakeSections.add(new SnakeSection(snake2.snakeSections.getLast()));
-				if(snake2.snakeSections.size() > Snake.SnakeStartLength)
-					snake2.snakeSections.removeFirst();
-				
 				snake1.moveSnake(snake1.snakeSections.getLast(), player);
+			}
+			
+			if(snake2.snakeSections.size() < Snake.SnakeStartLength || player.moves % 2 == 0) {
+				snake2.snakeSections.add(new SnakeSection(snake2.snakeSections.getLast()));
 				snake2.moveSnake(snake2.snakeSections.getLast(), player);
 			}
 		}

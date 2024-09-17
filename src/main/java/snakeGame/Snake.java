@@ -7,8 +7,11 @@ public class Snake {
 	
 	protected static final int SnakeStartLength = 5;
 	
-	protected ArrayList<SnakeSection> snakeSections = new ArrayList<SnakeSection>();
+	protected ArrayList<SnakeSection> snakeSections;
 	
+	public Snake() {
+		this.snakeSections  = new ArrayList<SnakeSection>();
+	}
 	
 	protected void moveSnake(final Point snakeSection, final Point player) {
 		if(snakeSection == null || player == null)
