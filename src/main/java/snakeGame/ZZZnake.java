@@ -27,14 +27,11 @@ public class ZZZnake {
 		snake1.snakeSections.getFirst().initializeRandomXY();
 		snake2.snakeSections.getFirst().initializeRandomXY();
 		
-		final ArrayList<GamePoint> snakePoints = new ArrayList<GamePoint>();
-		Scanner sc = new Scanner(System.in);
 		
+		Scanner sc = new Scanner(System.in);
+		ArrayList<GamePoint> snakePoints;
 		while(true) {
-			snakePoints.clear();
-			snakePoints.addAll(snake1.snakeSections);
-			snakePoints.addAll(snake2.snakeSections);
-			
+			snakePoints = GamePoint.collectGamePoints(snake1.snakeSections, snake2.snakeSections);
 			printScreen(snakePoints, player, gold1, gold2, door);
 			
 			if(gold1.isCollected && gold2.isCollected && player.equals(door)) {
@@ -49,31 +46,23 @@ public class ZZZnake {
 				return;
 			}
 			
-			if(player.equals(gold1)) {
-				gold1.setLocation(-1, -1);
-				gold1.isCollected = true;
-			}
-			if(player.equals(gold2)) {
-				gold2.setLocation(-1, -1);
-				gold2.isCollected = true;
+			if(player.isRich(gold1) || player.isRich(gold2) ) {		
+				snake1.halve();
+				snake2.cut(5);
+				snakePoints = GamePoint.collectGamePoints(snake1.snakeSections, snake2.snakeSections);
+				printScreen(snakePoints, player, gold1, gold2, door);
 			}
 			
 			player.movePlayerOverBorders(sc);
+			
 			if(!player.validInput) {
 				sc.close();
 				return;
 			}
 			
 			// The snake grows after every second move of the player
-			if(snake1.snakeSections.size() < Snake.SnakeStartLength || player.moves % 2 == 0) {
-				snake1.snakeSections.add(new SnakeSection(snake1.snakeSections.getLast()));
-				snake1.moveSnake(snake1.snakeSections.getLast(), player);
-			}
-			
-			if(snake2.snakeSections.size() < Snake.SnakeStartLength || player.moves % 2 == 0) {
-				snake2.snakeSections.add(new SnakeSection(snake2.snakeSections.getLast()));
-				snake2.moveSnake(snake2.snakeSections.getLast(), player);
-			}
+			snake1.grow(player);
+			snake2.grow(player);
 		}
 	}
 	
@@ -115,4 +104,5 @@ public class ZZZnake {
 			System.out.println();
 		}
 	}
+	
 }

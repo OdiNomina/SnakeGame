@@ -15,6 +15,15 @@ public class Player extends GamePoint {
 	protected boolean validInput = true;
 	
 	
+	protected boolean isRich(Gold gold) {
+		if(this.equals(gold)) {
+			gold.setLocation(-1, -1);
+			gold.isCollected = true;
+			return true;
+		}
+		return false;
+	}
+	
 	protected void movePlayer(final Scanner sc) {
 		if(sc == null)
 			throw new IllegalArgumentException("Scanner is null");
