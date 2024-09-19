@@ -13,7 +13,7 @@ public class Snake {
 		this.snakeSections  = new ArrayList<SnakeSection>();
 	}
 	
-	private void moveSnake(final Point snakeSection, final Point player) {
+	protected void moveSnake(final Point snakeSection, final Point player) {
 		if(snakeSection == null || player == null)
 			throw new IllegalArgumentException("Can not move snake, argument is null");
 		
@@ -38,7 +38,8 @@ public class Snake {
 			snakeSections.removeAll(snakeSections.subList(0, snakeSections.size() / 2));
 	}
 	
-	protected void grow(Player player) {
+	protected void growAndMove(Player player) {
+		// The snake grows after every second move of the player
 		if(snakeSections.size() < SnakeStartLength || player.moves % 2 == 0) {
 			snakeSections.add(new SnakeSection(snakeSections.getLast()));
 			moveSnake(snakeSections.getLast(), player);

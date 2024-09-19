@@ -1,5 +1,7 @@
 package snakeGame;
 
+import java.io.Console;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Player extends GamePoint {
@@ -24,9 +26,8 @@ public class Player extends GamePoint {
 		return false;
 	}
 	
-	protected void movePlayer(final Scanner sc) {
-		if(sc == null)
-			throw new IllegalArgumentException("Scanner is null");
+	protected void movePlayer() {
+		Scanner sc = new Scanner(System.in);
 		
 		moved:{
 			for(int i = 0; i < 10; i++) {
@@ -59,12 +60,52 @@ public class Player extends GamePoint {
 			System.out.println("\nZuviele ungültige Eingaben -> Spiel wird beendet!");
 			validInput = false;
 		}
+		sc.close();
 	}
 	
+	protected void movePlayerOverBorders(Console console) {
+		if(console != null) {
+			PrintWriter consoleWriter = console.writer();
+			
+			moved:{
+				for(int i = 0; i < 10; i++) {
+					switch(console.readLine().charAt(0)) {
+						case 'w', 'W', 'h', 'H' -> {
+							y = (y - 1) < 0 ? (GamePoint.YMAX - 1) : ( y - 1 );
+							moves++;
+							break moved;
+						}
+						case 's', 'S', 't', 'T' -> {
+							y = (y + 1) > (GamePoint.YMAX - 1) ? 0 : (y + 1);
+							moves++;
+							break moved;
+						}
+						case 'a', 'A', 'l', 'L' -> {
+							x = (x - 1) < 0 ? (GamePoint.XMAX - 1) : (x - 1);
+							moves++;
+							break moved;
+						}
+						case 'd', 'D', 'r', 'R' -> {
+							x = (x + 1) > (GamePoint.XMAX - 1) ? 0 : (x + 1);
+							moves++;
+							break moved;
+						}
+						default -> {
+							consoleWriter.println(validKeys);
+						}
+					}
+				}
+				consoleWriter.println("\nZuviele ungültige Eingaben -> Spiel wird beendet!");
+				validInput = false;
+			}
+			consoleWriter.close();
+		}
+		else
+			movePlayerOverBorders();
+	}
 	
-	protected void movePlayerOverBorders(final Scanner sc) {
-		if(sc == null)
-			throw new IllegalArgumentException("Scanner is null");
+	protected void movePlayerOverBorders() {
+		Scanner sc = new Scanner(System.in);
 		
 		moved:{
 			for(int i = 0; i < 10; i++) {

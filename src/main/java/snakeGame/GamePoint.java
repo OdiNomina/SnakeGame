@@ -24,7 +24,9 @@ class GamePoint extends Point {
 		return snakePoints;
 	}
 
-	@SuppressWarnings("unused")
+/*
+ * Type safety: Potential heap pollution via varargs parameter ???
+ * 
 	protected static ArrayList<GamePoint> collectGamePoints(ArrayList<SnakeSection>... snakeSectionLists) {
 		ArrayList<GamePoint> snakePoints = new ArrayList<GamePoint>();
 		
@@ -33,4 +35,5 @@ class GamePoint extends Point {
 		
 		return snakePoints;
 	}
+*/
 }
