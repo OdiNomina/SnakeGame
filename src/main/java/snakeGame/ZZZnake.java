@@ -2,6 +2,7 @@ package snakeGame;
 
 import java.awt.Point;
 import java.io.Console;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +12,12 @@ public class ZZZnake {
 //	Die Tür und das Gold sind fest, der Spieler kann bewegt werden und die Schlangen bewegen sich selbstständig auf den Spieler zu.
 //	Der Spieler muss zum Gold und dann zur Tür. Wenn eine Schlange den Spieler vorher erwischt, ist das Spiel verloren.
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Console console = System.console();
-		if (console == null)
+		PrintWriter consoleWriter = null;
+		if (console != null)
+			consoleWriter = console.writer();
+		else
 			System.err.println("No console device available.");
 
 		final Player player = new Player();
@@ -35,29 +39,39 @@ public class ZZZnake {
 		ArrayList<GamePoint> snakePoints;
 		while(true) {
 			snakePoints = GamePoint.collectGamePoints(snake1.snakeSections, snake2.snakeSections);
-			printScreen(console, snakePoints, player, gold1, gold2, door);
+			clearScreen(consoleWriter);  
+			printScreen(consoleWriter, snakePoints, player, gold1, gold2, door);
 			
 			if(gold1.isCollected && gold2.isCollected && player.equals(door)) {
-				printOutput(console, "\nGewonnen!");
+				printOutput(consoleWriter, "Gewonnen!");
+				if(consoleWriter != null)
+					consoleWriter.close();
 				return;
 			}
 			
 			if(snakePoints.contains(player)) {
-				printOutput(console, "\nZZZZZZZ - Die Schlange hat dich!");
+				printOutput(consoleWriter, "ZZZZZZZ... Die Schlange hat dich!");
+				if(consoleWriter != null)
+					consoleWriter.close();
 				return;
 			}
 			
 			if(player.isRich(gold1) || player.isRich(gold2) ) {		
 				snake1.halve();
-				snake2.cut(5);
+				snake2.halve();;
 				snakePoints = GamePoint.collectGamePoints(snake1.snakeSections, snake2.snakeSections);
-				printScreen(console, snakePoints, player, gold1, gold2, door);
+				clearScreen(consoleWriter); 
+				printScreen(consoleWriter, snakePoints, player, gold1, gold2, door);
 			}
 			
-			player.movePlayerOverBorders(console);
+			player.movePlayerOverBorders(console, consoleWriter);
 			
-			if(!player.validInput)
+			if(!player.validInput) {
+				printOutput(consoleWriter, "Zuviele ungültige Eingaben -> Spiel wird beendet!");
+				if(consoleWriter != null)
+					consoleWriter.close();
 				return;
+			}
 			
 			snake1.growAndMove(player);
 			snake2.growAndMove(player);
@@ -65,10 +79,8 @@ public class ZZZnake {
 	}
 	
 	
-	private static void printScreen(Console console, final ArrayList<GamePoint> snakePoints, GamePoint... points){
-		if(console != null) {
-			PrintWriter consoleWriter = console.writer();
-			
+	private static void printScreen(PrintWriter consoleWriter, final ArrayList<GamePoint> snakePoints, GamePoint... points){
+		if(consoleWriter != null) {
 			ArrayList<Point> printPoints = new ArrayList<Point>();
 			printPoints.addAll(snakePoints);
 			printPoints.addAll(Arrays.asList(points));
@@ -81,30 +93,38 @@ public class ZZZnake {
 						for(Point p : printPoints) {
 							if(currentPosition.equals(p)) {
 								if(p instanceof SnakeSection) {
-									consoleWriter.print( " S " ); 
+									consoleWriter.flush();
+									consoleWriter.print( ".S." ); 
 									break;
 								}
 								if(p instanceof Player) {
+									consoleWriter.flush();
 									consoleWriter.print( "°O°" );
 									break;
 								}
 								if(p instanceof Gold) {
+									consoleWriter.flush();
 									consoleWriter.print( "|$|" );
 									break;
 								}
 								if(p instanceof Door) {
+									consoleWriter.flush();
 									consoleWriter.print( "###" );
 									break;
 								}
 							}
 						}
 					}
-					else
+					else {
+						consoleWriter.flush();
 						consoleWriter.print( "..." );
+					}
 				}
+				consoleWriter.flush();
 				consoleWriter.println();
 			}
-			consoleWriter.close();
+			consoleWriter.flush();
+			consoleWriter.println();
 		}
 		else
 			printScreen(snakePoints, points);
@@ -123,7 +143,7 @@ public class ZZZnake {
 					for(Point p : printPoints) {
 						if(currentPosition.equals(p)) {
 							if(p instanceof SnakeSection) {
-								System.out.print( " S " ); 
+								System.out.print( ".S." ); 
 								break;
 							}
 							if(p instanceof Player) {
@@ -146,15 +166,28 @@ public class ZZZnake {
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 	
-	private static void printOutput(Console console, String output) {
-		if(console != null) {
-			PrintWriter consoleWriter = console.writer();
-			consoleWriter.println( output );
-			consoleWriter.close();
+	private static void printOutput(PrintWriter consoleWriter, String output) {
+		if(consoleWriter != null) {
+			consoleWriter.flush();
+			consoleWriter.println(output + "\n");
+			consoleWriter.flush();
+			consoleWriter.println();
 		}
 		else
-			System.out.println( output );
+			System.out.println("\n" + output + "\n");
 	}
+	
+    private final static void clearScreen(PrintWriter consoleWriter) {  
+    	if(consoleWriter != null) {
+    		consoleWriter.flush();
+			consoleWriter.println("\033[H");
+    	}
+    	else {
+    		System.out.print("\033[H");  
+	    	System.out.flush();
+    	}
+    }
 }

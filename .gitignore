@@ -2,6 +2,7 @@
 # Customized by Silke
 
 ### Eclipse ###
+*.class
 .metadata
 bin/
 tmp/
